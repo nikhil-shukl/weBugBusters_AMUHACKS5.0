@@ -120,7 +120,7 @@ const LandingPage = () => {
     },
     {
       name: "Nikhil Shukla",
-      role: "AI/ML Engineer",
+      role: "AI/ML Engineer & Backend Lead",
       avatar: "https://i.im.ge/2026/02/11/eNax00.Screenshot-2026-02-11-115028.png",
       github: "#",
       linkedin: "#"
