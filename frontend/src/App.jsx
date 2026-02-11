@@ -1,4 +1,3 @@
-// src/App.jsx
 import React from 'react';
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 import { ResultsProvider } from './context/ResultsContext';
@@ -6,15 +5,18 @@ import Layout from './components/Layout';
 import LandingPage from './pages/LandingPage';
 import SignUp from './pages/SignUp';
 import ProjectAnalyzer from './pages/ProjectAnalyzer';
-import SkillChartPage from './pages/SkillChartPage'; // your new page
-import Sidebar from "./components/Sidebar";
-import ResumeAnalyzer from "./pages/ResumeAnalyzer";
-import ResumeWorkspace from "./pages/ResumeWorkspace";
+import SkillChartPage from './pages/SkillChartPage';
+import ResumeAnalyzer from './pages/ResumeAnalyzer';
+import ResumeWorkspace from './pages/ResumeWorkspace';
+import JobRoleMatchPage from './pages/JobRoleMatchPage';
+// ❌ REMOVE this incorrect import:
+// import Sidebar from "./pages/Sidebar";
 
-// Other placeholders (you can add more as needed)
-const Community = () => <div className="p-8 text-white text-center">Community</div>;
+// ✅ Keep this if you need it elsewhere, but it's not used in App.jsx
+// The Sidebar is already used inside Layout, so we don't need to import it here.
+
+// Placeholders
 const Talks = () => <div className="p-8 text-white text-center">Disha Talks</div>;
-// ... etc
 
 function App() {
   return (
@@ -26,13 +28,11 @@ function App() {
 
           <Route element={<Layout />}>
             <Route path="/analyzer" element={<ProjectAnalyzer />} />
-            <Route path="/skill_chart" element={<SkillChartPage />} /> {/* ← exact match */}
-            {/* Resume Studio Main Page */}
+            <Route path="/skill_chart" element={<SkillChartPage />} />
+            <Route path="/role-match" element={<JobRoleMatchPage />} />
             <Route path="/resume-studio" element={<ResumeAnalyzer />} />
-
-            {/* Resume Workspace Page */}
             <Route path="/resume-workspace" element={<ResumeWorkspace />} />
-            {/* other routes */}
+            <Route path="/talks" element={<Talks />} />
           </Route>
         </Routes>
       </ResultsProvider>

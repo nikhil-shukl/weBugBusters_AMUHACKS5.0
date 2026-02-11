@@ -1,17 +1,16 @@
-// src/components/Sidebar.jsx
 import React from 'react';
 import { NavLink } from 'react-router-dom';
 import {
   Home,
   Compass,
-  MessageCircle,
+  Briefcase,
   Sparkles,
   FileText,
-  Briefcase,
   Layers,
   Search,
   User,
-  Settings
+  Settings,
+  LogOut
 } from 'lucide-react';
 
 const Sidebar = () => {
@@ -20,14 +19,13 @@ const Sidebar = () => {
       category: 'HOME',
       items: [
         { name: 'Dashboard', icon: Home, path: '/analyzer' }
-        // Skill Chart removed from HOME
       ]
     },
     {
       category: 'EXPLORE',
       items: [
-        { name: 'Skill Chart', icon: Compass, path: '/skill_chart' }, // <-- HERE
-        { name: 'Community', icon: MessageCircle, path: '/community' },
+        { name: 'Skill Chart', icon: Compass, path: '/skill_chart' },
+        { name: 'Role Match', icon: Briefcase, path: '/role-match' },
         { name: 'Disha Talks', icon: Sparkles, path: '/talks' }
       ]
     },
@@ -35,32 +33,25 @@ const Sidebar = () => {
       category: 'TOOLS',
       items: [
         { name: 'TorchMyResume', icon: FileText, path: '/torch' },
-        { name: 'Resume Studio', icon: Briefcase, path: '/resume-studio' },
-        { name: 'Mock Interview', icon: Layers, path: '/mock' },
+        { name: 'Resume Studio', icon: Layers, path: '/resume-studio' },
+        { name: 'Mock Interview', icon: FileText, path: '/mock' },
         { name: 'Skill-set Finder', icon: Search, path: '/skillset' }
       ]
     },
     {
       category: 'ACCOUNT',
-      items: [{ name: 'Log-Out', icon: User, path: '/' }]
-    },
-    
+      items: [
+        { name: 'Log-Out', icon: LogOut, path: '/logout' }
+      ]
+    }
   ];
 
   return (
     <aside className="fixed left-0 top-0 h-screen w-64 bg-[#020617]/80 backdrop-blur-2xl border-r border-white/10 z-50">
-      {/* Brand */}
-      <div className="flex items-center space-x-3 p-5 border-b border-white/10">
-        <div className="flex items-center justify-center w-10 h-10 rounded-xl bg-gradient-to-br from-[#22d3ee] to-[#c084fc] shadow-lg shadow-cyan-500/20">
-          <Sparkles className="w-5 h-5 text-white" />
-        </div>
-        <div>
-          <h2 className="text-lg font-bold text-white tracking-tight">Bridge-AI</h2>
-          <p className="text-[10px] text-slate-400 font-medium uppercase">by weBugBusters</p>
-        </div>
-      </div>
-
-      <nav className="p-4 space-y-6 overflow-y-auto h-[calc(100vh-80px)]">
+      {/* ----- BRAND AREA – COMPLETELY EMPTY ----- */}
+      {/* No logo, no text – just empty space */}
+      
+      <nav className="p-4 space-y-6 overflow-y-auto h-screen">
         {navItems.map((section) => (
           <div key={section.category}>
             <h3 className="px-3 text-xs font-semibold text-slate-400 uppercase tracking-wider mb-2">
