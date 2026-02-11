@@ -9,8 +9,9 @@ import {
   Layers,
   Search,
   User,
-  Settings,
-  LogOut
+  LogOut,
+  TrendingUp,    // <-- for Skill Gap
+  Map            // <-- for Roadmap
 } from 'lucide-react';
 
 const Sidebar = () => {
@@ -26,7 +27,9 @@ const Sidebar = () => {
       items: [
         { name: 'Skill Chart', icon: Compass, path: '/skill_chart' },
         { name: 'Role Match', icon: Briefcase, path: '/role-match' },
-        { name: 'Disha Talks', icon: Sparkles, path: '/talks' }
+        { name: 'Skill Gap', icon: TrendingUp, path: '/skill-gap' },        // <-- NEW
+        { name: 'Career Roadmap', icon: Map, path: '/roadmap' },            // <-- NEW
+        
       ]
     },
     {
@@ -48,10 +51,10 @@ const Sidebar = () => {
 
   return (
     <aside className="fixed left-0 top-0 h-screen w-64 bg-[#020617]/80 backdrop-blur-2xl border-r border-white/10 z-50">
-      {/* ----- BRAND AREA – COMPLETELY EMPTY ----- */}
-      {/* No logo, no text – just empty space */}
+      {/* Empty brand space */}
+      <div className="p-5"></div>
       
-      <nav className="p-4 space-y-6 overflow-y-auto h-screen">
+      <nav className="p-4 space-y-6 overflow-y-auto h-[calc(100vh-80px)]">
         {navItems.map((section) => (
           <div key={section.category}>
             <h3 className="px-3 text-xs font-semibold text-slate-400 uppercase tracking-wider mb-2">
