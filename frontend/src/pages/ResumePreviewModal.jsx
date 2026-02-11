@@ -1,3 +1,5 @@
+import { generateResumeHTML } from "../templates/modernResumeTemplate";
+
 export default function ResumePreviewModal({
   show,
   onClose,
@@ -5,21 +7,30 @@ export default function ResumePreviewModal({
 }) {
   if (!show) return null;
 
+  const htmlContent = generateResumeHTML(resumeData);
+
   return (
-    <div className="fixed inset-0 bg-black bg-opacity-60 flex justify-center items-center">
-      <div className="bg-white text-black w-[800px] p-8 rounded-xl">
-        <h2 className="text-xl font-bold mb-4">
-          Resume Preview
-        </h2>
+    <div className="fixed inset-0 bg-black/70 flex items-center justify-center z-50">
+      <div className="bg-white w-[850px] h-[90vh] rounded-xl overflow-hidden shadow-2xl flex flex-col">
 
-        <p>{resumeData.professional_summary}</p>
+        <div className="flex justify-between items-center p-4 border-b">
+          <h2 className="text-xl font-bold">Resume Preview</h2>
+          <button
+            onClick={onClose}
+            className="bg-purple-600 text-white px-4 py-2 rounded"
+          >
+            Close
+          </button>
+        </div>
 
-        <button
-          onClick={onClose}
-          className="mt-6 bg-purple-600 px-4 py-2 text-white rounded"
-        >
-          Close
-        </button>
+        <div className="flex-1 overflow-auto">
+          <iframe
+            title="Resume Preview"
+            srcDoc={htmlContent}
+            className="w-full h-full"
+          />
+        </div>
+
       </div>
     </div>
   );
