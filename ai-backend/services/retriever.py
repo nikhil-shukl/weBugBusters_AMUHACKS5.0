@@ -1,3 +1,4 @@
-def retrieve_relevant_chunks(vectorstore, query):
-    docs = vectorstore.similarity_search(query, k=2)
-    return [doc.page_content for doc in docs]
+def retrieve_with_score(vectorstore, query, k=3):
+    docs = vectorstore.similarity_search_with_score(query, k=k)
+    return docs
+
