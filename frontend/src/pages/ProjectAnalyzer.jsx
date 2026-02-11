@@ -4,6 +4,7 @@ import jsPDF from 'jspdf';
 import { analyzeProject } from '../services/api';
 import FileUpload from '../components/FileUpload';
 import Loader from '../components/Loader';
+
 import {
   Brain,
   Sparkles,
