@@ -10,8 +10,9 @@ import {
   Search,
   User,
   LogOut,
-  TrendingUp,    // <-- for Skill Gap
-  Map            // <-- for Roadmap
+  TrendingUp,
+  Map,
+  Zap      // <-- IMPORT ZAP for Growth Simulator
 } from 'lucide-react';
 
 const Sidebar = () => {
@@ -27,18 +28,17 @@ const Sidebar = () => {
       items: [
         { name: 'Skill Chart', icon: Compass, path: '/skill_chart' },
         { name: 'Role Match', icon: Briefcase, path: '/role-match' },
-        { name: 'Skill Gap', icon: TrendingUp, path: '/skill-gap' },        // <-- NEW
-        { name: 'Career Roadmap', icon: Map, path: '/roadmap' },            // <-- NEW
-        
+        { name: 'Skill Gap', icon: TrendingUp, path: '/skill-gap' },
+        { name: 'Growth Simulator', icon: Zap, path: '/growth-simulator' }, // <-- NEW
+        { name: 'Career Roadmap', icon: Map, path: '/roadmap' }
       ]
     },
     {
       category: 'TOOLS',
       items: [
-        { name: 'TorchMyResume', icon: FileText, path: '/torch' },
+       
         { name: 'Resume Studio', icon: Layers, path: '/resume-studio' },
-        { name: 'Mock Interview', icon: FileText, path: '/mock' },
-        { name: 'Skill-set Finder', icon: Search, path: '/skillset' }
+        { name: 'Mock Interview', icon: FileText, path: '/mock' }
       ]
     },
     {
@@ -51,8 +51,23 @@ const Sidebar = () => {
 
   return (
     <aside className="fixed left-0 top-0 h-screen w-64 bg-[#020617]/80 backdrop-blur-2xl border-r border-white/10 z-50">
-      {/* Empty brand space */}
-      <div className="p-5"></div>
+      {/* Logo area – stacked logo */}
+      <div className="p-5 border-b border-white/10">
+        {/* If you have a Logo component, use it; otherwise keep empty or simple */}
+        <div className="flex flex-col items-start">
+          <div className="flex items-center gap-2">
+            <div className="w-8 h-8 rounded-lg bg-gradient-to-br from-cyan-400 to-purple-500 flex items-center justify-center">
+              <Sparkles className="w-4 h-4 text-white" />
+            </div>
+            <span className="text-lg font-bold bg-gradient-to-r from-cyan-400 to-purple-400 bg-clip-text text-transparent">
+              Bridge-AI
+            </span>
+          </div>
+          <span className="text-[10px] text-slate-500 mt-1 uppercase tracking-wider">
+            by weBugBusters
+          </span>
+        </div>
+      </div>
       
       <nav className="p-4 space-y-6 overflow-y-auto h-[calc(100vh-80px)]">
         {navItems.map((section) => (

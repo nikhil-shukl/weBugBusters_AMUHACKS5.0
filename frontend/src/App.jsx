@@ -9,11 +9,12 @@ import SkillChartPage from './pages/SkillChartPage';
 import JobRoleMatchPage from './pages/JobRoleMatchPage';
 import SkillGapPage from './pages/SkillGapPage';
 import LearningRoadmapPage from './pages/LearningRoadmapPage';
+import SkillGrowthSimulatorPage from './pages/SkillGrowthSimulatorPage';
 import ResumeAnalyzer from './pages/ResumeAnalyzer';
 import ResumeWorkspace from './pages/ResumeWorkspace';
-import Logout from './pages/Logout';  // <-- NEW
+import Logout from './pages/Logout';
 
-// Placeholders
+// Placeholders for other routes
 const Talks = () => <div className="p-8 text-white text-center">Disha Talks</div>;
 
 function App() {
@@ -21,19 +22,22 @@ function App() {
     <Router>
       <ResultsProvider>
         <Routes>
+          {/* Public routes – no sidebar */}
           <Route path="/" element={<LandingPage />} />
           <Route path="/signup" element={<SignUp />} />
 
+          {/* App routes – with persistent sidebar */}
           <Route element={<Layout />}>
             <Route path="/analyzer" element={<ProjectAnalyzer />} />
             <Route path="/skill_chart" element={<SkillChartPage />} />
             <Route path="/role-match" element={<JobRoleMatchPage />} />
             <Route path="/skill-gap" element={<SkillGapPage />} />
             <Route path="/roadmap" element={<LearningRoadmapPage />} />
+            <Route path="/growth-simulator" element={<SkillGrowthSimulatorPage />} />
             <Route path="/resume-studio" element={<ResumeAnalyzer />} />
             <Route path="/resume-workspace" element={<ResumeWorkspace />} />
             <Route path="/talks" element={<Talks />} />
-            <Route path="/logout" element={<Logout />} />  {/* <-- NEW ROUTE */}
+            <Route path="/logout" element={<Logout />} />
           </Route>
         </Routes>
       </ResultsProvider>
