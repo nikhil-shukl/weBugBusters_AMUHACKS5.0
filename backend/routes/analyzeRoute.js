@@ -8,4 +8,4 @@ const upload = multer({ dest: "uploads/" });
 
 router.post("/analyze", upload.single("file"), analyzeProject);
 
-export default router;
+export default router; 

@@ -1,7 +1,6 @@
 import React, { useState } from 'react';
 import { analyzeProject } from '../services/api';
 import FileUpload from '../components/FileUpload';
-import SkillCard from '../components/SkillCard';
 import Loader from '../components/Loader';
 import { Brain, Sparkles, TrendingUp, CheckCircle, AlertCircle, ArrowRight } from 'lucide-react';
 
@@ -161,22 +160,112 @@ const ProjectAnalyzer = () => {
               </button>
             </div>
 
-            {/* Skills Grid Mapping */}
-            <div className="space-y-6 max-w-4xl mx-auto">
-              {results.skills && results.skills.length > 0 ? (
-                results.skills.map((skill, index) => (
-                  <div key={index} className="animate-in fade-in slide-in-from-bottom-4" style={{ animationDelay: `${index * 100}ms` }}>
-                    <SkillCard skill={skill} />
-                  </div>
-                ))
-              ) : (
-                <div className="glass-panel text-center py-16">
-                  <AlertCircle className="w-12 h-12 text-slate-500 mx-auto mb-4" />
-                  <h3 className="text-xl font-bold text-slate-300 mb-2">No Clear Skills Detected</h3>
-                  <p className="text-slate-500 max-w-md mx-auto">We couldn't extract definitive technical skills from this document. Try uploading a more detailed project report or technical specification.</p>
-                </div>
-              )}
-            </div>
+{/* ===== SUMMARY SECTION ===== */}
+<div className="glass-panel p-8 space-y-6">
+  <h3 className="text-2xl font-bold text-white">Professional Summary</h3>
+  <p className="text-slate-300 leading-relaxed">
+    {results.summary}
+  </p>
+
+  <div className="mt-4">
+    <div className="text-sm text-slate-400 mb-2">Career Readiness Score</div>
+    <div className="w-full bg-slate-800 rounded-full h-3">
+      <div
+        className="h-3 rounded-full bg-gradient-to-r from-cyan-400 to-purple-500"
+        style={{ width: `${results.career_readiness_score}%` }}
+      ></div>
+    </div>
+    <p className="text-cyan-400 font-bold mt-2">
+      {results.career_readiness_score} / 100
+    </p>
+  </div>
+</div>
+
+
+{/* ===== SKILLS BULLET LIST ===== */}
+<div className="glass-panel p-8">
+  <h3 className="text-2xl font-bold text-white mb-6">
+    Verified Skills ({results.skills?.length})
+  </h3>
+
+  <ul className="space-y-4">
+    {results.skills.map((skill, index) => (
+      <li key={index} className="border-b border-white/10 pb-4">
+        <div className="flex justify-between">
+          <span className="text-lg font-semibold text-cyan-300">
+            • {skill.name}
+          </span>
+          <span className="text-sm text-slate-400">
+            {skill.category} | {skill.depth}
+          </span>
+        </div>
+
+        <p className="text-slate-400 text-sm mt-2 italic">
+          "{skill.evidence}"
+        </p>
+      </li>
+    ))}
+  </ul>
+</div>
+
+
+{/* ===== INDUSTRY GAP ===== */}
+<div className="glass-panel p-8">
+  <h3 className="text-2xl font-bold text-red-400 mb-4">
+    Industry Gap Analysis
+  </h3>
+
+  <ul className="list-disc pl-6 space-y-2 text-slate-300">
+    {results.industry_gap_analysis?.map((gap, index) => (
+      <li key={index}>{gap}</li>
+    ))}
+  </ul>
+</div>
+
+
+{/* ===== SUGGESTED SKILLS ===== */}
+<div className="glass-panel p-8">
+  <h3 className="text-2xl font-bold text-yellow-400 mb-4">
+    Suggested Skills to Learn
+  </h3>
+
+  <div className="flex flex-wrap gap-3">
+    {results.suggested_skills_to_learn?.map((skill, index) => (
+      <span
+        key={index}
+        className="px-4 py-2 bg-yellow-500/10 border border-yellow-500/20 rounded-full text-yellow-300 text-sm font-medium"
+      >
+        {skill}
+      </span>
+    ))}
+  </div>
+</div>
+
+
+{/* ===== RECOMMENDED JOB ROLES ===== */}
+<div className="glass-panel p-8">
+  <h3 className="text-2xl font-bold text-emerald-400 mb-4">
+    Recommended Job Roles
+  </h3>
+
+  <div className="flex flex-wrap gap-3">
+    {results.recommended_job_roles?.map((role, index) => (
+      <span
+        key={index}
+        className="px-4 py-2 bg-emerald-500/10 border border-emerald-500/20 rounded-full text-emerald-300 text-sm font-semibold"
+      >
+        {role}
+      </span>
+    ))}
+  </div>
+</div>
+<button
+  onClick={() => { setResults(null); setSelectedFile(null); }}
+  className="mt-10 btn-secondary-outline"
+>
+  Analyze Another Project
+</button>
+
           </div>
         )}
       </main>
