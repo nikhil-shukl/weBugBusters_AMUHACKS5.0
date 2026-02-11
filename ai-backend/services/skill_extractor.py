@@ -100,4 +100,4 @@ Document:
             "industry_gap_analysis": [],
             "suggested_skills_to_learn": [],
             "recommended_job_roles": []
-        }
+        }      

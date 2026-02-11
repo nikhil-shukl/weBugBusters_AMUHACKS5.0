@@ -1,31 +1,32 @@
 import axios from "axios";
+import FormData from "form-data";
 import fs from "fs";
-import Analysis from "../models/analysisModel.js";
 
 export const analyzeProject = async (req, res) => {
   try {
-    const filePath = req.file.path;
+    if (!req.file) {
+      return res.status(400).json({ error: "No file uploaded" });
+    }
 
     const formData = new FormData();
-    formData.append("file", fs.createReadStream(filePath));
+    formData.append("file", fs.createReadStream(req.file.path));
 
     const response = await axios.post(
-      "http://127.0.0.1:8000/analyze",
+      process.env.AI_BACKEND_URL + "/analyze",
       formData,
-      { headers: formData.getHeaders() }
+      {
+        headers: formData.getHeaders(),
+        maxContentLength: Infinity,
+        maxBodyLength: Infinity,
+      }
     );
 
-    const result = response.data;
-
-    const saved = await Analysis.create({
-      skills: result.skills,
-      summary: result.summary,
-      career_score: result.career_readiness_score
-    });
-
-    res.json(saved);
-
+    res.json(response.data);
   } catch (error) {
-    res.status(500).json({ message: "Analysis failed" });
+    console.error("Analyze Error:", error.response?.data || error.message);
+    res.status(500).json({
+      error: "AI Processing Failed",
+      details: error.response?.data || error.message,
+    });
   }
 };
