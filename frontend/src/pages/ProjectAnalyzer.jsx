@@ -3,7 +3,7 @@ import { analyzeProject } from '../services/api';
 import FileUpload from '../components/FileUpload';
 import SkillCard from '../components/SkillCard';
 import Loader from '../components/Loader';
-import { Brain, Sparkles, TrendingUp, CheckCircle, AlertCircle } from 'lucide-react';
+import { Brain, Sparkles, TrendingUp, CheckCircle, AlertCircle, ArrowRight } from 'lucide-react';
 
 const ProjectAnalyzer = () => {
   const [selectedFile, setSelectedFile] = useState(null);
@@ -19,7 +19,6 @@ const ProjectAnalyzer = () => {
 
   const handleAnalyze = async () => {
     if (!selectedFile) return;
-
     setIsAnalyzing(true);
     setError(null);
 
@@ -35,96 +34,100 @@ const ProjectAnalyzer = () => {
   };
 
   return (
-    <div className="min-h-screen pb-16">
-      {/* Header Section */}
-      <header className="bg-white/80 backdrop-blur-md border-b border-slate-200 sticky top-0 z-50">
-        <div className="max-w-7xl mx-auto px-6 py-6">
+    <div className="min-h-screen pb-24 flex flex-col">
+      {/* Sticky Glassmorphic Header */}
+      <header className="bg-[#020617]/50 backdrop-blur-2xl border-b border-white/10 sticky top-0 z-50">
+        <div className="max-w-7xl mx-auto px-6 py-4">
           <div className="flex items-center justify-between">
-            <div className="flex items-center space-x-3">
-              <div className="flex items-center justify-center w-12 h-12 rounded-xl bg-gradient-to-br from-primary-500 to-accent-500">
+            {/* Logo Area */}
+            <div className="flex items-center space-x-4">
+              <div className="flex items-center justify-center w-12 h-12 rounded-xl bg-gradient-to-br from-[#22d3ee] to-[#c084fc] shadow-lg shadow-cyan-500/20">
                 <Brain className="w-7 h-7 text-white" />
               </div>
               <div>
-                <h1 className="text-2xl font-bold gradient-text">Bridge-AI</h1>
-                <p className="text-sm text-slate-600">Academic-to-Career Skill Verification Platform</p>
+                <h1 className="text-2xl font-bold text-white tracking-tight leading-none">Bridge-AI</h1>
+                <p className="text-xs text-slate-400 font-medium mt-1 uppercase tracking-widest">by weBugBusters</p>
               </div>
             </div>
 
-            <div className="flex items-center space-x-2 px-4 py-2 bg-primary-50 rounded-lg border border-primary-200">
-              <Sparkles className="w-4 h-4 text-primary-600" />
-              <span className="text-sm font-medium text-primary-700">Evidence-Based AI</span>
+            {/* Status Badge */}
+            <div className="hidden md:flex items-center space-x-2 px-4 py-2 bg-cyan-500/10 rounded-full border border-cyan-500/20">
+              <Sparkles className="w-4 h-4 text-cyan-400" />
+              <span className="text-sm font-semibold text-cyan-300">Evidence-Based AI</span>
             </div>
           </div>
         </div>
       </header>
 
-      {/* Main Content */}
-      <main className="max-w-5xl mx-auto px-6 py-12">
+      {/* Main Content Area */}
+      <main className="flex-grow max-w-5xl mx-auto px-6 py-16 w-full">
+        
         {/* Hero Section */}
         {!results && !isAnalyzing && (
-          <div className="text-center mb-12">
-            <div className="inline-flex items-center space-x-2 px-4 py-2 bg-accent-50 rounded-full mb-6">
-              <TrendingUp className="w-4 h-4 text-accent-600" />
-              <span className="text-sm font-medium text-accent-700">Trusted by Students & Recruiters</span>
+          <div className="text-center mb-16 animate-in fade-in slide-in-from-bottom-4 duration-700">
+            <div className="inline-flex items-center space-x-2 px-5 py-2.5 bg-white/5 border border-white/10 rounded-full mb-8 shadow-lg">
+              <TrendingUp className="w-4 h-4 text-[#f472b6]" />
+              <span className="text-sm font-medium text-slate-300">Trusted by Students & Recruiters</span>
             </div>
 
-            <h2 className="text-4xl md:text-5xl font-bold text-slate-900 mb-4 leading-tight">
-              Verify Your Skills with
-              <span className="gradient-text"> Real Evidence</span>
+            <h2 className="text-5xl md:text-6xl font-extrabold text-white mb-6 leading-tight tracking-tight">
+              Verify Your Skills with <br/>
+              <span className="gradient-heading">Real Evidence</span>
             </h2>
             
-            <p className="text-xl text-slate-600 max-w-2xl mx-auto leading-relaxed">
-              Upload your project documentation and get AI-powered skill verification backed by actual evidence from your work
+            <p className="text-lg md:text-xl text-slate-400 max-w-2xl mx-auto leading-relaxed">
+              Upload your project documentation and let our AI extract, verify, and quantify your market-ready skills.
             </p>
           </div>
         )}
 
-        {/* Upload Section */}
+        {/* Interactive Upload Section */}
         {!isAnalyzing && !results && (
-          <div className="max-w-2xl mx-auto">
+          <div className="max-w-2xl mx-auto animate-in fade-in duration-1000 delay-150">
             <FileUpload onFileSelect={handleFileSelect} disabled={isAnalyzing} />
 
-            <div className="mt-8 text-center">
+            <div className="mt-10 text-center">
               <button
                 onClick={handleAnalyze}
                 disabled={!selectedFile || isAnalyzing}
-                className={`px-8 py-4 rounded-xl font-semibold text-lg transition-all duration-300 ${
-                  selectedFile && !isAnalyzing
-                    ? 'bg-gradient-to-r from-primary-600 to-accent-600 text-white shadow-lg hover:shadow-xl hover:scale-105 transform'
-                    : 'bg-slate-200 text-slate-400 cursor-not-allowed'
+                className={`w-full md:w-auto flex items-center justify-center space-x-3 mx-auto ${
+                  selectedFile && !isAnalyzing 
+                    ? 'btn-primary-glow text-lg' 
+                    : 'px-8 py-4 rounded-xl font-bold text-slate-500 bg-white/5 border border-white/10 cursor-not-allowed text-lg'
                 }`}
               >
-                <span className="flex items-center space-x-2">
-                  <Brain className="w-5 h-5" />
-                  <span>Analyze Project</span>
-                </span>
+                <Brain className="w-6 h-6" />
+                <span>Analyze Project</span>
+                {selectedFile && !isAnalyzing && <ArrowRight className="w-5 h-5 ml-2" />}
               </button>
 
-              <p className="text-sm text-slate-500 mt-4">
-                No signup required • Privacy guaranteed • Free to use
+              <p className="text-sm text-slate-500 mt-6 font-medium">
+                No signup required • Secure Processing • Fast Results
               </p>
             </div>
           </div>
         )}
 
         {/* Loading State */}
-        {isAnalyzing && <Loader />}
+        {isAnalyzing && (
+          <div className="animate-in fade-in duration-300">
+             <Loader />
+          </div>
+        )}
 
         {/* Error State */}
         {error && (
-          <div className="max-w-2xl mx-auto mb-8">
-            <div className="bg-red-50 border-2 border-red-200 rounded-2xl p-6">
-              <div className="flex items-start space-x-4">
-                <AlertCircle className="w-6 h-6 text-red-600 flex-shrink-0 mt-1" />
+          <div className="max-w-2xl mx-auto mb-8 animate-in slide-in-from-bottom-4">
+            <div className="glass-panel border-red-500/30 bg-red-500/10 p-8 relative overflow-hidden">
+              <div className="absolute top-0 left-0 w-1 h-full bg-red-500"></div>
+              <div className="flex items-start space-x-5">
+                <AlertCircle className="w-8 h-8 text-red-400 flex-shrink-0" />
                 <div>
-                  <h3 className="font-semibold text-red-900 mb-1">Analysis Failed</h3>
-                  <p className="text-red-700">{error}</p>
+                  <h3 className="text-xl font-bold text-red-200 mb-2">Analysis Failed</h3>
+                  <p className="text-red-300/80 mb-4">{error}</p>
                   <button
-                    onClick={() => {
-                      setError(null);
-                      setResults(null);
-                    }}
-                    className="mt-3 text-sm text-red-600 underline hover:text-red-800"
+                    onClick={() => { setError(null); setResults(null); }}
+                    className="px-5 py-2 bg-red-500/20 hover:bg-red-500/30 text-red-200 rounded-lg font-medium transition-colors"
                   >
                     Try Again
                   </button>
@@ -136,41 +139,41 @@ const ProjectAnalyzer = () => {
 
         {/* Results Section */}
         {results && !isAnalyzing && (
-          <div className="space-y-8">
-            {/* Results Header */}
-            <div className="text-center pb-8 border-b border-slate-200">
-              <div className="inline-flex items-center space-x-2 px-4 py-2 bg-primary-50 rounded-full mb-4">
-                <CheckCircle className="w-4 h-4 text-primary-600" />
-                <span className="text-sm font-medium text-primary-700">Analysis Complete</span>
+          <div className="space-y-12 animate-in fade-in slide-in-from-bottom-8 duration-700">
+            <div className="text-center pb-12 border-b border-white/10">
+              <div className="inline-flex items-center space-x-2 px-5 py-2.5 bg-emerald-500/10 border border-emerald-500/20 rounded-full mb-6 shadow-lg shadow-emerald-500/5">
+                <CheckCircle className="w-5 h-5 text-emerald-400" />
+                <span className="text-sm font-bold text-emerald-300 tracking-wide uppercase">Analysis Complete</span>
               </div>
 
-              <h2 className="text-3xl font-bold text-slate-900 mb-3">
-                {results.skills?.length || 0} Skills Verified
+              <h2 className="text-4xl md:text-5xl font-bold text-white mb-4">
+                <span className="gradient-heading">{results.skills?.length || 0} Verified Skills</span> Found
               </h2>
-              <p className="text-slate-600 text-lg">
-                Each skill is backed by actual evidence from your project
+              <p className="text-slate-400 text-lg max-w-2xl mx-auto">
+                We've analyzed your documentation and mapped these capabilities directly to industry demands.
               </p>
 
               <button
-                onClick={() => {
-                  setResults(null);
-                  setSelectedFile(null);
-                }}
-                className="mt-6 px-6 py-3 bg-slate-100 text-slate-700 rounded-xl font-medium hover:bg-slate-200 transition-colors"
+                onClick={() => { setResults(null); setSelectedFile(null); }}
+                className="mt-10 btn-secondary-outline"
               >
                 Analyze Another Project
               </button>
             </div>
 
-            {/* Skills Grid */}
-            <div className="space-y-6">
+            {/* Skills Grid Mapping */}
+            <div className="space-y-6 max-w-4xl mx-auto">
               {results.skills && results.skills.length > 0 ? (
                 results.skills.map((skill, index) => (
-                  <SkillCard key={index} skill={skill} />
+                  <div key={index} className="animate-in fade-in slide-in-from-bottom-4" style={{ animationDelay: `${index * 100}ms` }}>
+                    <SkillCard skill={skill} />
+                  </div>
                 ))
               ) : (
-                <div className="text-center py-12">
-                  <p className="text-slate-600">No skills found in the document. Please try uploading a different project.</p>
+                <div className="glass-panel text-center py-16">
+                  <AlertCircle className="w-12 h-12 text-slate-500 mx-auto mb-4" />
+                  <h3 className="text-xl font-bold text-slate-300 mb-2">No Clear Skills Detected</h3>
+                  <p className="text-slate-500 max-w-md mx-auto">We couldn't extract definitive technical skills from this document. Try uploading a more detailed project report or technical specification.</p>
                 </div>
               )}
             </div>
@@ -179,13 +182,15 @@ const ProjectAnalyzer = () => {
       </main>
 
       {/* Footer */}
-      <footer className="mt-20 border-t border-slate-200 bg-white/50 backdrop-blur-sm">
+      <footer className="w-full border-t border-white/10 bg-[#020617]/80 backdrop-blur-xl mt-auto">
         <div className="max-w-7xl mx-auto px-6 py-8">
-          <div className="text-center text-slate-600">
-            <p className="text-sm">
-              Built for <span className="font-semibold text-slate-800">AMUHACKS 5.0</span> | 
-              Evidence-based AI for Academic-to-Career Skill Verification
-            </p>
+          <div className="flex flex-col md:flex-row justify-between items-center gap-4">
+            <div className="text-slate-500 text-sm font-medium">
+              Built for <span className="font-bold text-slate-300">AMUHACKS 5.0</span>
+            </div>
+            <div className="text-slate-600 text-sm">
+              &copy; {new Date().getFullYear()} weBugBusters. All rights reserved.
+            </div>
           </div>
         </div>
       </footer>

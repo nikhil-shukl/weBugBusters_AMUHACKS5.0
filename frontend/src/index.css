@@ -4,39 +4,75 @@
 
 @layer base {
   body {
-    @apply bg-gradient-to-br from-slate-50 via-white to-purple-50 min-h-screen font-sans antialiased;
+    /* Deep midnight navy background with a subtle radial gradient for depth */
+    @apply bg-[#020617] text-slate-100 min-h-screen font-sans antialiased;
+    background-image: 
+      radial-gradient(circle at 20% 20%, rgba(34, 211, 238, 0.05) 0%, transparent 40%),
+      radial-gradient(circle at 80% 80%, rgba(139, 92, 246, 0.05) 0%, transparent 40%);
+  }
+
+  /* Custom Scrollbar for a premium feel */
+  ::-webkit-scrollbar {
+    width: 8px;
+  }
+  ::-webkit-scrollbar-track {
+    @apply bg-[#020617];
+  }
+  ::-webkit-scrollbar-thumb {
+    @apply bg-slate-700 rounded-full hover:bg-slate-600 transition-colors;
   }
 }
 
 @layer components {
-  .gradient-text {
-    @apply bg-gradient-to-r from-primary-600 to-accent-600 bg-clip-text text-transparent;
+  /* The "Academic Work Into Career Skills" multi-color gradient */
+  .gradient-heading {
+    @apply bg-gradient-to-r from-[#22d3ee] via-[#f472b6] to-[#c084fc] bg-clip-text text-transparent;
   }
-  
-  .card-shadow {
-    @apply shadow-lg shadow-slate-200/50 hover:shadow-xl hover:shadow-slate-300/50 transition-all duration-300;
+
+  /* Glassmorphic card style used for the Skill Score and Dashboard preview */
+  .glass-panel {
+    @apply bg-white/5 backdrop-blur-xl border border-white/10 rounded-2xl shadow-2xl;
   }
-  
-  .upload-area {
-    @apply border-2 border-dashed border-slate-300 rounded-2xl p-12 text-center hover:border-primary-400 hover:bg-primary-50/30 transition-all duration-300 cursor-pointer;
+
+  /* Skill Pills (The boxes like React.js, Node.js in your screenshot) */
+  .skill-pill {
+    @apply flex items-center gap-2 px-4 py-3 bg-white/5 border border-white/10 rounded-xl
+           hover:bg-white/10 hover:border-cyan-500/50 transition-all duration-300;
   }
-  
-  .upload-area-active {
-    @apply border-primary-500 bg-primary-50/50;
+
+  /* Primary Action Button (The "Sign Up" / "Get Started" style) */
+  .btn-primary-glow {
+    @apply relative overflow-hidden bg-gradient-to-r from-cyan-500 to-purple-600 px-8 py-3 rounded-xl 
+           font-bold text-white shadow-lg shadow-cyan-500/20 hover:shadow-cyan-500/40 
+           transition-all duration-300 active:scale-95;
+  }
+
+  /* Secondary Button (The "Watch Demo" / "Sign In" style) */
+  .btn-secondary-outline {
+    @apply px-8 py-3 border border-cyan-500/30 rounded-xl font-bold text-slate-200 
+           hover:bg-cyan-500/10 hover:border-cyan-500/60 transition-all duration-300;
+  }
+
+  /* File Upload Area for the Analyzer Tool */
+  .upload-dropzone {
+    @apply border-2 border-dashed border-white/10 rounded-3xl p-12 text-center 
+           hover:border-cyan-400/50 hover:bg-white/[0.02] transition-all duration-500 cursor-pointer;
   }
 }
 
 @layer utilities {
-  .animate-float {
-    animation: float 3s ease-in-out infinite;
+  /* Floating animation for icons/graphics */
+  .animate-float-slow {
+    animation: float 6s ease-in-out infinite;
   }
-  
+
   @keyframes float {
-    0%, 100% {
-      transform: translateY(0px);
-    }
-    50% {
-      transform: translateY(-10px);
-    }
+    0%, 100% { transform: translateY(0px); }
+    50% { transform: translateY(-15px); }
+  }
+
+  /* Animated background orbs for that "Bridge-AI" feel */
+  .bg-orb {
+    @apply absolute blur-[120px] rounded-full opacity-20 -z-10;
   }
 }
