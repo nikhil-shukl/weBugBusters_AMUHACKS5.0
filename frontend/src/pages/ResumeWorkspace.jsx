@@ -2,7 +2,7 @@
 
 import { useLocation } from "react-router-dom";
 import { useState } from "react";
-import ResumePreviewModal from "../components/ResumePreviewModal";
+import ResumePreviewModal from "./ResumePreviewModal";
 
 export default function ResumeWorkspace() {
   const location = useLocation();
