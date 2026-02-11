@@ -1,5 +1,5 @@
 // src/pages/ResumeWorkspace.jsx
-
+import { formatResumeToMarkdown } from "../utils/formatResume";
 import { useLocation } from "react-router-dom";
 import { useState } from "react";
 import ResumePreviewModal from "./ResumePreviewModal";
@@ -9,6 +9,7 @@ import { generateResumeHTML } from "../templates/modernResumeTemplate";
 export default function ResumeWorkspace() {
   const location = useLocation();
   const analysis = location.state?.analysis;
+  const formattedResume = formatResumeToMarkdown(analysis);
 
   const [showPreview, setShowPreview] = useState(false);
 
@@ -53,46 +54,53 @@ export default function ResumeWorkspace() {
     }
   };
 
-  return (
-    <div className="min-h-screen bg-[#0B1026] text-white p-10">
+return (
+  <div className="min-h-screen bg-[#0B1026] text-white p-10">
 
-      <div className="flex justify-between mb-6">
-        <h1 className="text-3xl font-bold">Resume Workspace</h1>
+    {/* Header */}
+    <div className="flex justify-between mb-6">
+      <h1 className="text-3xl font-bold">Workspace (Tech Modern)</h1>
 
-        <div className="space-x-4">
-          <button
-            onClick={() => setShowPreview(true)}
-            className="bg-green-500 hover:bg-green-600 px-4 py-2 rounded-lg"
-          >
-            Preview
-          </button>
+      <div className="space-x-4">
+        <button
+          onClick={() => setShowPreview(true)}
+          className="bg-green-500 hover:bg-green-600 px-4 py-2 rounded-lg"
+        >
+          Preview
+        </button>
 
-          <button
-            onClick={handleDownload}
-            className="bg-purple-600 hover:bg-purple-700 px-4 py-2 rounded-lg"
-          >
-            Download PDF
-          </button>
-        </div>
+        <button
+          onClick={handleDownload}
+          className="bg-purple-600 hover:bg-purple-700 px-4 py-2 rounded-lg"
+        >
+          Download PDF
+        </button>
       </div>
-
-      {/* Quick Summary Section */}
-      <div className="bg-[#11172F] p-6 rounded-xl border border-white/10">
-        <h2 className="text-xl font-semibold mb-3">
-          Professional Summary
-        </h2>
-
-        <p className="text-slate-300">
-          {analysis.professional_summary}
-        </p>
-      </div>
-
-      {/* Preview Modal */}
-      <ResumePreviewModal
-        show={showPreview}
-        onClose={() => setShowPreview(false)}
-        resumeData={analysis}
-      />
     </div>
-  );
+
+    {/* Resume Editor View */}
+    <div className="
+      bg-[#0F172A]
+      p-8
+      rounded-2xl
+      border border-cyan-500/20
+      shadow-lg
+      font-mono
+      text-sm
+      leading-relaxed
+      whitespace-pre-wrap
+      text-slate-200
+    ">
+      {formattedResume}
+    </div>
+
+    {/* Preview Modal */}
+    <ResumePreviewModal
+      show={showPreview}
+      onClose={() => setShowPreview(false)}
+      resumeData={analysis}
+    />
+  </div>
+);
+
 }
