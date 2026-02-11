@@ -1,17 +1,22 @@
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@100;200;300;400;500;600;700;800;900&display=swap');
+
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
 
 @layer base {
+  html {
+    scroll-behavior: smooth;
+  }
+  
   body {
-    /* Deep midnight navy background with a subtle radial gradient for depth */
-    @apply bg-[#020617] text-slate-100 min-h-screen font-sans antialiased;
+    @apply bg-[#020617] text-slate-200 min-h-screen font-sans antialiased;
+    font-family: 'Inter', system-ui, sans-serif;
     background-image: 
-      radial-gradient(circle at 20% 20%, rgba(34, 211, 238, 0.05) 0%, transparent 40%),
-      radial-gradient(circle at 80% 80%, rgba(139, 92, 246, 0.05) 0%, transparent 40%);
+      radial-gradient(circle at 100% 0%, rgba(139, 92, 246, 0.03) 0%, transparent 50%),
+      radial-gradient(circle at 0% 100%, rgba(34, 211, 238, 0.03) 0%, transparent 50%);
   }
 
-  /* Custom Scrollbar for a premium feel */
   ::-webkit-scrollbar {
     width: 8px;
   }
@@ -19,60 +24,292 @@
     @apply bg-[#020617];
   }
   ::-webkit-scrollbar-thumb {
-    @apply bg-slate-700 rounded-full hover:bg-slate-600 transition-colors;
+    @apply bg-slate-700 rounded-full hover:bg-slate-600;
   }
 }
 
 @layer components {
-  /* The "Academic Work Into Career Skills" multi-color gradient */
+  /* Navigation */
+  .nav-link {
+    @apply text-slate-400 hover:text-white transition-colors text-sm font-medium;
+  }
+
+  .nav-container {
+    @apply fixed top-0 left-0 right-0 z-50 bg-[#020617]/80 backdrop-blur-2xl border-b border-white/10;
+  }
+
+  /* Logo */
+  .logo-container {
+    @apply flex items-center gap-3;
+  }
+
+  .logo-icon {
+    @apply w-10 h-10 bg-gradient-to-r from-[#22d3ee] to-[#c084fc] rounded-lg flex items-center justify-center shadow-lg;
+  }
+
+  .logo-text {
+    @apply text-lg font-bold text-white;
+  }
+
+  .logo-subtext {
+    @apply text-xs text-slate-500;
+  }
+
+  /* Buttons */
+  .btn-primary {
+    @apply px-6 py-2.5 bg-gradient-to-r from-[#22d3ee] to-[#c084fc] 
+           text-white font-semibold rounded-lg shadow-lg shadow-[#22d3ee]/20 
+           hover:shadow-[#c084fc]/40 hover:scale-105 transition-all duration-300 
+           active:scale-95 text-sm;
+  }
+
+  .btn-outline {
+    @apply px-6 py-2.5 border border-white/10 rounded-lg 
+           text-slate-300 font-medium hover:bg-white/5 
+           hover:border-white/20 transition-all duration-300 text-sm;
+  }
+
+  .btn-get-started {
+    @apply px-8 py-4 bg-gradient-to-r from-[#22d3ee] to-[#c084fc] 
+           text-white font-semibold rounded-xl shadow-lg shadow-[#22d3ee]/20 
+           hover:shadow-[#c084fc]/40 hover:scale-105 transition-all duration-300 
+           active:scale-95 text-lg inline-flex items-center gap-2;
+  }
+
+  .btn-demo {
+    @apply px-8 py-4 bg-white/5 border border-white/10 
+           text-white font-semibold rounded-xl backdrop-blur-xl
+           hover:bg-white/10 hover:border-white/20 hover:scale-105 
+           transition-all duration-300 text-lg;
+  }
+
+  .btn-start {
+    @apply px-10 py-5 bg-gradient-to-r from-[#22d3ee] to-[#c084fc] 
+           text-white font-bold rounded-xl shadow-lg shadow-[#22d3ee]/20 
+           hover:shadow-[#c084fc]/40 hover:scale-105 transition-all duration-300 
+           text-xl inline-flex items-center gap-2;
+  }
+
+  /* Glass Cards */
+  .glass-card {
+    @apply bg-[#0f172a]/50 backdrop-blur-xl border border-white/10 rounded-2xl shadow-xl 
+           hover:border-[#22d3ee]/30 transition-all duration-300;
+  }
+
+  .glass-panel {
+    @apply bg-[#0f172a]/40 backdrop-blur-xl border border-white/10 rounded-2xl shadow-2xl;
+  }
+
+  /* Dashboard */
+  .dashboard-card {
+    @apply glass-card p-8 relative overflow-hidden;
+  }
+
+  .score-title {
+    @apply text-sm text-slate-500 mb-1;
+  }
+
+  .score-number {
+    @apply text-5xl font-bold gradient-text;
+  }
+
+  .progress-bar-bg {
+    @apply w-full h-2 bg-[#1e293b] rounded-full overflow-hidden;
+  }
+
+  .progress-bar-fill {
+    @apply h-full bg-gradient-to-r from-[#22d3ee] to-[#c084fc] rounded-full;
+  }
+
+  /* Skill Pills */
+  .skill-pill {
+    @apply flex items-center gap-2 px-4 py-3 bg-[#0f172a]/60 border border-white/10 rounded-xl
+           text-slate-300 text-sm hover:bg-[#1e293b]/80 hover:border-[#22d3ee]/50 
+           transition-all duration-300;
+  }
+
+  /* Stats Cards */
+  .stats-grid {
+    @apply grid grid-cols-4 gap-4 pt-8;
+  }
+
+  .stat-item {
+    @apply text-center;
+  }
+
+  .stat-number {
+    @apply text-2xl font-bold gradient-text;
+  }
+
+  .stat-label {
+    @apply text-xs text-slate-500 mt-1;
+  }
+
+  /* Feature Cards */
+  .feature-card {
+    @apply glass-card p-8 hover:border-[#22d3ee]/30 transition-all duration-300;
+  }
+
+  .feature-icon {
+    @apply w-14 h-14 bg-gradient-to-br from-[#22d3ee] to-[#c084fc] rounded-xl 
+           flex items-center justify-center mb-5 group-hover:scale-110 transition-transform duration-300;
+  }
+
+  .feature-title {
+    @apply text-xl font-bold mb-3 group-hover:text-[#22d3ee] transition-colors;
+  }
+
+  .feature-desc {
+    @apply text-slate-400 leading-relaxed mb-4;
+  }
+
+  .feature-tag {
+    @apply inline-flex items-center gap-2 text-sm;
+  }
+
+  .feature-tag-icon {
+    @apply w-4 h-4 text-[#22d3ee];
+  }
+
+  .feature-tag-text {
+    @apply text-[#22d3ee] font-semibold;
+  }
+
+  /* Steps */
+  .steps-grid {
+    @apply grid md:grid-cols-4 gap-6 relative;
+  }
+
+  .step-card {
+    @apply glass-card p-8 text-center hover:border-[#22d3ee]/50 transition-all duration-300 h-full relative;
+  }
+
+  .step-number {
+    @apply absolute -top-6 left-1/2 transform -translate-x-1/2 w-12 h-12 
+           bg-gradient-to-r from-[#22d3ee] to-[#c084fc] rounded-full 
+           flex items-center justify-center text-lg font-bold text-white;
+  }
+
+  .step-icon {
+    @apply w-16 h-16 bg-[#0f172a] rounded-xl flex items-center justify-center 
+           mx-auto mb-6 mt-4 text-[#22d3ee];
+  }
+
+  .step-title {
+    @apply text-lg font-bold mb-3;
+  }
+
+  .step-desc {
+    @apply text-slate-400 text-sm leading-relaxed;
+  }
+
+  /* CTA Section */
+  .cta-card {
+    @apply glass-card p-16 text-center relative overflow-hidden;
+  }
+
+  .cta-title {
+    @apply text-4xl md:text-5xl font-bold mb-6;
+  }
+
+  .cta-subtitle {
+    @apply text-xl text-slate-400 mb-8 max-w-2xl mx-auto;
+  }
+
+  .cta-note {
+    @apply text-sm text-slate-600 mt-4;
+  }
+
+  /* Footer */
+  .footer {
+    @apply border-t border-white/10 py-12 px-6;
+  }
+
+  .footer-container {
+    @apply max-w-7xl mx-auto;
+  }
+
+  .footer-grid {
+    @apply grid md:grid-cols-4 gap-8 mb-8;
+  }
+
+  .footer-brand {
+    @apply col-span-1;
+  }
+
+  .footer-brand-text {
+    @apply text-sm text-slate-500 mt-4 leading-relaxed;
+  }
+
+  .footer-title {
+    @apply font-semibold mb-4 text-[#22d3ee] text-sm;
+  }
+
+  .footer-links {
+    @apply space-y-2 text-sm;
+  }
+
+  .footer-link {
+    @apply text-slate-500 hover:text-white transition-colors block;
+  }
+
+  .footer-social {
+    @apply flex space-x-3;
+  }
+
+  .footer-social-icon {
+    @apply w-10 h-10 glass-card flex items-center justify-center 
+           hover:border-[#22d3ee]/50 transition-all;
+  }
+
+  .footer-bottom {
+    @apply border-t border-white/10 pt-8 text-center text-sm text-slate-600;
+  }
+
+  /* Gradient Text */
+  .gradient-text {
+    @apply bg-gradient-to-r from-[#22d3ee] via-[#f472b6] to-[#c084fc] bg-clip-text text-transparent font-bold;
+  }
+
   .gradient-heading {
     @apply bg-gradient-to-r from-[#22d3ee] via-[#f472b6] to-[#c084fc] bg-clip-text text-transparent;
   }
 
-  /* Glassmorphic card style used for the Skill Score and Dashboard preview */
-  .glass-panel {
-    @apply bg-white/5 backdrop-blur-xl border border-white/10 rounded-2xl shadow-2xl;
+  /* Badges */
+  .badge {
+    @apply inline-flex items-center gap-2 px-4 py-2 glass-card rounded-full text-sm;
   }
 
-  /* Skill Pills (The boxes like React.js, Node.js in your screenshot) */
-  .skill-pill {
-    @apply flex items-center gap-2 px-4 py-3 bg-white/5 border border-white/10 rounded-xl
-           hover:bg-white/10 hover:border-cyan-500/50 transition-all duration-300;
+  /* Floating Orbs */
+  .floating-orb {
+    @apply absolute rounded-full opacity-20 blur-3xl animate-pulse-slow;
   }
 
-  /* Primary Action Button (The "Sign Up" / "Get Started" style) */
-  .btn-primary-glow {
-    @apply relative overflow-hidden bg-gradient-to-r from-cyan-500 to-purple-600 px-8 py-3 rounded-xl 
-           font-bold text-white shadow-lg shadow-cyan-500/20 hover:shadow-cyan-500/40 
-           transition-all duration-300 active:scale-95;
+  .orb-1 {
+    @apply w-[500px] h-[500px] bg-[#22d3ee] top-[-10%] left-[-10%];
   }
 
-  /* Secondary Button (The "Watch Demo" / "Sign In" style) */
-  .btn-secondary-outline {
-    @apply px-8 py-3 border border-cyan-500/30 rounded-xl font-bold text-slate-200 
-           hover:bg-cyan-500/10 hover:border-cyan-500/60 transition-all duration-300;
-  }
-
-  /* File Upload Area for the Analyzer Tool */
-  .upload-dropzone {
-    @apply border-2 border-dashed border-white/10 rounded-3xl p-12 text-center 
-           hover:border-cyan-400/50 hover:bg-white/[0.02] transition-all duration-500 cursor-pointer;
+  .orb-2 {
+    @apply w-[500px] h-[500px] bg-[#c084fc] bottom-[-10%] right-[-5%] delay-4000;
   }
 }
 
 @layer utilities {
-  /* Floating animation for icons/graphics */
-  .animate-float-slow {
-    animation: float 6s ease-in-out infinite;
+  /* Animations */
+  .animate-pulse-slow {
+    animation: pulse-slow 6s cubic-bezier(0.4, 0, 0.6, 1) infinite;
   }
 
-  @keyframes float {
-    0%, 100% { transform: translateY(0px); }
-    50% { transform: translateY(-15px); }
+  .delay-2000 {
+    animation-delay: 2s;
+  }
+  
+  .delay-4000 {
+    animation-delay: 4s;
   }
 
-  /* Animated background orbs for that "Bridge-AI" feel */
-  .bg-orb {
-    @apply absolute blur-[120px] rounded-full opacity-20 -z-10;
+  @keyframes pulse-slow {
+    0%, 100% { opacity: 0.15; }
+    50% { opacity: 0.25; }
   }
 }

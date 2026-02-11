@@ -547,7 +547,7 @@ const LandingPage = () => {
             <div>
               <h4 className="footer-title">Connect</h4>
               <div className="footer-social">
-                <a href="https://github.com/nikhil-shukl/weBugBusters_AMUHACKS5.0" className="footer-social-icon">
+                <a href="#" className="footer-social-icon">
                   <Github className="w-5 h-5 text-slate-400" />
                 </a>
                 <a href="#" className="footer-social-icon">
