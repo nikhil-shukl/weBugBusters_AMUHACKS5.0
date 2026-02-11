@@ -28,13 +28,7 @@ export default {
           DEFAULT: '#f472b6', // Pink (from "Work")
           light: '#f9a8d4',
           dark: '#db2777',
-        },
-        // Add these aliases for compatibility with LandingPage
-        'neon-blue': '#22d3ee',
-        'neon-purple': '#c084fc',
-        'neon-pink': '#f472b6',
-        'neon-green': '#4ade80',
-        'dark-lighter': '#0f172a',
+        }
       },
       fontFamily: {
         sans: ['Inter', 'system-ui', 'sans-serif'],
@@ -45,11 +39,7 @@ export default {
       },
       animation: {
         'pulse-slow': 'pulse 6s cubic-bezier(0.4, 0, 0.6, 1) infinite',
-      },
-      // Add custom utilities for glass morphism
-      backdropBlur: {
-        xs: '2px',
-      },
+      }
     },
   },
   plugins: [],
