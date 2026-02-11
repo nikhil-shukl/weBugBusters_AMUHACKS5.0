@@ -1,8 +1,7 @@
-import json
 from langchain_openai import ChatOpenAI
-from langchain.prompts import ChatPromptTemplate
-from services.retriever import retrieve_with_score
+from langchain_core.prompts import ChatPromptTemplate
 from core.config import OPENAI_API_KEY
+import json
 
 
 def extract_skills_with_evidence(vectorstore, chunks):
@@ -13,79 +12,92 @@ def extract_skills_with_evidence(vectorstore, chunks):
         openai_api_key=OPENAI_API_KEY
     )
 
-    full_text = "\n".join(chunks)
+    document_text = "\n".join(chunks)
 
-    # STEP 1: Extract possible skills from document
-    extraction_prompt = ChatPromptTemplate.from_template("""
-You are an AI system that extracts all clearly identifiable skills from academic project reports.
+    prompt = ChatPromptTemplate.from_template("""
+You are an advanced AI Career Intelligence Engine.
 
-RULES:
-- Extract only skills that are explicitly present.
-- Do NOT guess.
-- Categorize skills into:
-    Technical
-    Tools
-    Management
-    Communication
-    Leadership
-    Domain
-- Return JSON list:
-[
-  {{
-    "name": "...",
-    "category": "..."
-  }}
-]
+Analyze the given academic resume or project report deeply.
 
-If no strong skills are found, return:
-[]
+Perform the following tasks:
+
+1. Extract ALL verifiable skills.
+2. Categorize each skill into:
+   - Technical
+   - Tools
+   - Management
+   - Communication
+   - Leadership
+   - Domain
+3. Determine skill depth:
+   - Beginner
+   - Intermediate
+   - Advanced
+4. Provide exact supporting evidence sentence.
+5. Assign confidence score (0–100).
+6. Calculate overall Career Readiness Score (0–100).
+7. Identify Industry Skill Gaps.
+8. Suggest new skills to learn.
+9. Suggest 3 suitable job roles based on current skill profile.
+10. Provide a detailed professional analysis summary.
+
+IMPORTANT:
+- Only extract skills explicitly supported by text.
+- Do NOT hallucinate.
+- Return STRICT JSON only.
+- No explanation text.
+
+Return in this exact format:
+
+{{
+  "summary": "...",
+  "career_readiness_score": 0,
+  "skills": [
+    {{
+      "name": "...",
+      "category": "...",
+      "depth": "...",
+      "confidence_score": 0,
+      "evidence": "..."
+    }}
+  ],
+  "industry_gap_analysis": [
+    "..."
+  ],
+  "suggested_skills_to_learn": [
+    "..."
+  ],
+  "recommended_job_roles": [
+    "..."
+  ]
+}}
+
+If document lacks strong skill evidence:
+
+{{
+  "summary": "Insufficient verifiable skill content.",
+  "career_readiness_score": 0,
+  "skills": [],
+  "industry_gap_analysis": [],
+  "suggested_skills_to_learn": [],
+  "recommended_job_roles": []
+}}
+
 Document:
 {document}
 """)
 
-    skill_response = llm.invoke(
-        extraction_prompt.format(document=full_text)
-    )
+    response = llm.invoke(prompt.format(document=document_text))
 
     try:
-        skills = json.loads(skill_response.content)
+        parsed = json.loads(response.content)
+        return parsed
     except:
         return {
-            "message": "Skill extraction currently in development. Please upload a more detailed project document."
+            "summary": "Formatting issue detected.",
+            "career_readiness_score": 0,
+            "skills": [],
+            "industry_gap_analysis": [],
+            "suggested_skills_to_learn": [],
+            "recommended_job_roles": []
         }
-
-    if not skills:
-        return {
-            "message": "No strong verifiable skills found in the document. Please upload a technical or project-based report."
-        }
-
-    verified_results = []
-
-    # STEP 2: Verify each skill using RAG retrieval
-    for skill in skills:
-
-        skill_name = skill["name"]
-
-        retrieved_docs = retrieve_with_score(vectorstore, skill_name, k=2)
-
-        if not retrieved_docs:
-            continue
-
-        best_doc, score = retrieved_docs[0]
-
-        # Similarity threshold check (important)
-        if score < 0.5:  # adjust threshold if needed
-            verified_results.append({
-                "name": skill_name,
-                "category": skill["category"],
-                "evidence": best_doc.page_content[:300]
-            })
-
-    if not verified_results:
-        return {
-            "message": "Skills detected but not strongly verifiable from document context."
-        }
-
-    return {
-        "skills": verified_results
-    }
