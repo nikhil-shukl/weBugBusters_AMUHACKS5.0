@@ -40,8 +40,6 @@ const ProjectAnalyzer = () => {
   const { results, setResults } = useResults();
   const navigate = useNavigate();
 
-  const { results, setResults, clearResults } = useResults();
-
   // ----- Persist selected file metadata whenever it changes -----
   useEffect(() => {
     if (selectedFile) {
@@ -349,7 +347,7 @@ const ProjectAnalyzer = () => {
         )}
 
         {isAnalyzing && (
-          <div className="animate-in fade-in duration-300">
+          <div className="animate-in fade-in duration-500">
             <Loader />
           </div>
         )}

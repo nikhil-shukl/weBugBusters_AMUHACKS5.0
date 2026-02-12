@@ -1,66 +1,101 @@
-import React from 'react';
-import { Loader2, Sparkles, FileSearch } from 'lucide-react';
+import React, { useState, useEffect } from 'react';
+import { Brain, FileText, Code, Sparkles, CheckCircle, Loader2 } from 'lucide-react';
 
 const Loader = () => {
+  const [currentStep, setCurrentStep] = useState(0);
+  
+  const steps = [
+    { icon: FileText, text: 'Reading project documentation...', color: 'text-cyan-400' },
+    { icon: Code, text: 'Identifying skills and technologies...', color: 'text-purple-400' },
+    { icon: Brain, text: 'Extracting evidence from content...', color: 'text-emerald-400' },
+    { icon: Sparkles, text: 'Generating career insights...', color: 'text-amber-400' }
+  ];
+
+  // Cycle through steps every 2.5 seconds
+  useEffect(() => {
+    const interval = setInterval(() => {
+      setCurrentStep((prev) => (prev + 1) % steps.length);
+    }, 2500);
+    return () => clearInterval(interval);
+  }, [steps.length]);
+
   return (
-    <div className="w-full max-w-2xl mx-auto mt-12 mb-8">
-      <div className="bg-white rounded-3xl p-12 card-shadow">
-        <div className="flex flex-col items-center space-y-6">
-          {/* Animated Icon */}
-          <div className="relative">
-            <div className="absolute inset-0 bg-primary-400 blur-2xl opacity-30 animate-pulse"></div>
-            <div className="relative bg-gradient-to-br from-primary-500 to-accent-500 rounded-full p-6">
-              <Loader2 className="w-12 h-12 text-white animate-spin" />
-            </div>
-          </div>
-
-          {/* Main Text */}
-          <div className="text-center space-y-3">
-            <h3 className="text-2xl font-bold text-slate-800">
-              Analyzing Your Project
-            </h3>
-            <p className="text-slate-600 text-lg">
-              Our AI is extracting skills with real evidence...
-            </p>
-          </div>
-
-          {/* Progress Steps */}
-          <div className="w-full space-y-4 mt-8">
-            <div className="flex items-center space-x-4 text-slate-700">
-              <div className="flex items-center justify-center w-8 h-8 rounded-full bg-primary-100">
-                <FileSearch className="w-4 h-4 text-primary-600" />
-              </div>
-              <p className="text-sm font-medium">Reading project documentation</p>
-              <div className="flex-1 h-1 bg-primary-200 rounded-full overflow-hidden">
-                <div className="h-full bg-primary-500 rounded-full animate-pulse" style={{ width: '100%' }}></div>
-              </div>
-            </div>
-
-            <div className="flex items-center space-x-4 text-slate-700">
-              <div className="flex items-center justify-center w-8 h-8 rounded-full bg-accent-100">
-                <Sparkles className="w-4 h-4 text-accent-600" />
-              </div>
-              <p className="text-sm font-medium">Identifying skills and technologies</p>
-              <div className="flex-1 h-1 bg-accent-200 rounded-full overflow-hidden">
-                <div className="h-full bg-accent-500 rounded-full animate-pulse" style={{ width: '75%' }}></div>
-              </div>
-            </div>
-
-            <div className="flex items-center space-x-4 text-slate-700 opacity-60">
-              <div className="flex items-center justify-center w-8 h-8 rounded-full bg-slate-100">
-                <Sparkles className="w-4 h-4 text-slate-400" />
-              </div>
-              <p className="text-sm font-medium">Extracting evidence from content</p>
-              <div className="flex-1 h-1 bg-slate-200 rounded-full"></div>
-            </div>
-          </div>
-
-          {/* Estimated Time */}
-          <p className="text-sm text-slate-500 mt-6">
-            This usually takes 10-15 seconds
-          </p>
+    <div className="flex flex-col items-center justify-center py-16 px-4">
+      {/* Animated Logo */}
+      <div className="relative mb-12">
+        {/* Outer glow */}
+        <div className="absolute inset-0 bg-gradient-to-r from-cyan-500/30 to-purple-500/30 rounded-full blur-2xl animate-pulse"></div>
+        
+        {/* Main icon */}
+        <div className="relative w-28 h-28 rounded-full bg-gradient-to-br from-cyan-500/20 to-purple-500/20 backdrop-blur-sm border border-white/20 flex items-center justify-center animate-float-slow">
+          <div className="absolute inset-0 rounded-full border-2 border-transparent border-t-cyan-400 border-r-purple-400 animate-spin-slow"></div>
+          <Brain className="w-14 h-14 text-cyan-400 animate-pulse-slow" />
         </div>
       </div>
+
+      {/* Main message */}
+      <h2 className="text-3xl md:text-4xl font-bold text-white mb-3 text-center">
+        Analyzing Your Project
+      </h2>
+      <p className="text-slate-400 text-lg mb-10 text-center max-w-md">
+        Our AI is extracting skills with real evidence...
+      </p>
+
+      {/* Animated Progress Bar */}
+      <div className="w-full max-w-md bg-slate-800/50 rounded-full h-3 mb-10 overflow-hidden border border-white/10">
+        <div className="h-full rounded-full bg-gradient-to-r from-cyan-400 via-purple-400 to-cyan-400 animate-shimmer"></div>
+      </div>
+
+      {/* Current step with animated icon */}
+      <div className="flex items-center gap-4 glass-panel px-6 py-4 min-w-[300px] justify-center">
+        <div className="relative">
+          {React.createElement(steps[currentStep].icon, {
+            className: `w-6 h-6 ${steps[currentStep].color} animate-pulse`
+          })}
+          <span className="absolute -top-1 -right-1 w-3 h-3 bg-emerald-400 rounded-full animate-ping"></span>
+        </div>
+        <span className="text-slate-200 text-lg font-medium">
+          {steps[currentStep].text}
+        </span>
+      </div>
+
+      {/* Subtle time hint */}
+      <p className="text-slate-500 text-sm mt-8 flex items-center gap-2">
+        <Loader2 className="w-4 h-4 animate-spin" />
+        This usually takes 10–15 seconds
+      </p>
+
+      <style jsx>{`
+        @keyframes float-slow {
+          0%, 100% { transform: translateY(0px); }
+          50% { transform: translateY(-8px); }
+        }
+        @keyframes spin-slow {
+          0% { transform: rotate(0deg); }
+          100% { transform: rotate(360deg); }
+        }
+        @keyframes pulse-slow {
+          0%, 100% { opacity: 1; }
+          50% { opacity: 0.7; }
+        }
+        @keyframes shimmer {
+          0% { transform: translateX(-100%); }
+          100% { transform: translateX(100%); }
+        }
+        .animate-float-slow {
+          animation: float-slow 5s ease-in-out infinite;
+        }
+        .animate-spin-slow {
+          animation: spin-slow 8s linear infinite;
+        }
+        .animate-pulse-slow {
+          animation: pulse-slow 3s cubic-bezier(0.4, 0, 0.6, 1) infinite;
+        }
+        .animate-shimmer {
+          width: 50%;
+          animation: shimmer 2s infinite;
+        }
+      `}</style>
     </div>
   );
 };
