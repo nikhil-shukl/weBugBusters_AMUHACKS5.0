@@ -10,8 +10,10 @@ import {
   Search,
   User,
   LogOut,
-  TrendingUp,    // <-- for Skill Gap
-  Map            // <-- for Roadmap
+  TrendingUp,
+  Map,
+  Zap,
+  MessageSquare   // <-- IMPORTED for Mock Interview
 } from 'lucide-react';
 
 const Sidebar = () => {
@@ -27,18 +29,19 @@ const Sidebar = () => {
       items: [
         { name: 'Skill Chart', icon: Compass, path: '/skill_chart' },
         { name: 'Role Match', icon: Briefcase, path: '/role-match' },
-        { name: 'Skill Gap', icon: TrendingUp, path: '/skill-gap' },        // <-- NEW
-        { name: 'Career Roadmap', icon: Map, path: '/roadmap' },            // <-- NEW
-        
+        { name: 'Skill Gap', icon: TrendingUp, path: '/skill-gap' },
+        { name: 'Growth Simulator', icon: Zap, path: '/growth-simulator' },
+        { name: 'Career Roadmap', icon: Map, path: '/roadmap' }
       ]
     },
     {
       category: 'TOOLS',
       items: [
         { name: 'Bridge Mentor AI', icon: Sparkles, path: '/mentor' },
+
+       
         { name: 'Resume Studio', icon: Layers, path: '/resume-studio' },
-        { name: 'Mock Interview', icon: FileText, path: '/mock' },
-        { name: 'Skill-set Finder', icon: Search, path: '/skillset' }
+        { name: 'Mock Interview', icon: MessageSquare, path: '/mock-interview' }
       ]
     },
     {
@@ -51,8 +54,12 @@ const Sidebar = () => {
 
   return (
     <aside className="fixed left-0 top-0 h-screen w-64 bg-[#020617]/80 backdrop-blur-2xl border-r border-white/10 z-50">
-      {/* Empty brand space */}
-      <div className="p-5"></div>
+      {/* Logo area */}
+      <div className="p-5 border-b border-white/10">
+        <div className="flex flex-col items-start">
+          
+        </div>
+      </div>
       
       <nav className="p-4 space-y-6 overflow-y-auto h-[calc(100vh-80px)]">
         {navItems.map((section) => (

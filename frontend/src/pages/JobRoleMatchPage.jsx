@@ -1,4 +1,4 @@
-import React, { useMemo, useRef, useEffect } from 'react';
+import React, { useMemo, useRef, useEffect, useState } from 'react';
 import { useResults } from '../context/ResultsContext';
 import { jobRoleSkills } from '../data/jobRoleSkills';
 import { 
@@ -6,15 +6,15 @@ import {
   Target, 
   Award, 
   ArrowRight, 
-  Sparkles,
-  CheckCircle,
-  Circle
+  Sparkles 
 } from 'lucide-react';
 import ForceGraph2D from 'react-force-graph-2d';
 
 const JobRoleMatchPage = () => {
   const { results } = useResults();
   const graphRef = useRef();
+  const containerRef = useRef();
+  const [dimensions, setDimensions] = useState({ width: 0, height: 0 });
 
   // ----- Find best matching role -----
   const bestMatch = useMemo(() => {
@@ -37,15 +37,29 @@ const JobRoleMatchPage = () => {
     return best;
   }, [results]);
 
-  // ----- Graph data with FIXED POSITIONS (circular layout) -----
+  // ----- Measure container size on mount & resize -----
+  useEffect(() => {
+    const measure = () => {
+      if (containerRef.current) {
+        const { width, height } = containerRef.current.getBoundingClientRect();
+        setDimensions({ width, height });
+      }
+    };
+    measure();
+    window.addEventListener('resize', measure);
+    return () => window.removeEventListener('resize', measure);
+  }, []);
+
+  // ----- Graph data with DYNAMIC positions that stay inside container -----
   const graphData = useMemo(() => {
-    if (!results?.skills || !results?.recommended_job_roles) return { nodes: [], links: [] };
+    if (!results?.skills || !results?.recommended_job_roles || dimensions.width === 0) 
+      return { nodes: [], links: [] };
 
     const nodes = [];
     const links = [];
 
-    // Top skills (max 6)
-    const topSkills = results.skills.slice(0, 6).map((skill, i) => ({
+    // Take top 5 skills and top 3 roles (keeps graph clean)
+    const topSkills = results.skills.slice(0, 5).map((skill, i) => ({
       id: `skill-${i}`,
       name: skill.name,
       type: 'skill',
@@ -54,8 +68,7 @@ const JobRoleMatchPage = () => {
     }));
     nodes.push(...topSkills);
 
-    // Top roles (max 4)
-    const topRoles = results.recommended_job_roles.slice(0, 4).map((role, i) => ({
+    const topRoles = results.recommended_job_roles.slice(0, 3).map((role, i) => ({
       id: `role-${i}`,
       name: role,
       type: 'role',
@@ -64,21 +77,23 @@ const JobRoleMatchPage = () => {
     }));
     nodes.push(...topRoles);
 
-    // Assign fixed positions in a circle
-    const centerX = 300;
-    const centerY = 200;
-    const radius = 120;
-    
+    // ----- CENTERED CIRCULAR LAYOUT that fits ANY container -----
+    const centerX = dimensions.width / 2;
+    const centerY = dimensions.height / 2;
+    const radius = Math.min(dimensions.width, dimensions.height) * 0.25; // 25% of smallest side
+
+    // Position skills in a circle
     topSkills.forEach((node, i) => {
       const angle = (i / topSkills.length) * 2 * Math.PI;
       node.x = centerX + radius * Math.cos(angle);
       node.y = centerY + radius * Math.sin(angle);
     });
 
+    // Position roles in a slightly inner circle, offset
     topRoles.forEach((node, i) => {
-      const angle = (i / topRoles.length) * 2 * Math.PI + 0.5; // offset
-      node.x = centerX + radius * 0.7 * Math.cos(angle);
-      node.y = centerY + radius * 0.7 * Math.sin(angle);
+      const angle = (i / topRoles.length) * 2 * Math.PI + 0.3; // offset
+      node.x = centerX + radius * 0.6 * Math.cos(angle);
+      node.y = centerY + radius * 0.6 * Math.sin(angle);
     });
 
     // Connect skills to roles
@@ -96,12 +111,15 @@ const JobRoleMatchPage = () => {
     });
 
     return { nodes, links };
-  }, [results]);
+  }, [results, dimensions]);
 
-  // ----- Auto‑zoom to fit on load -----
+  // ----- Auto‑zoom to fit after render and on resize -----
   useEffect(() => {
-    if (graphRef.current) {
-      graphRef.current.zoomToFit(400, 20);
+    if (graphRef.current && graphData.nodes.length > 0) {
+      // Small delay to ensure DOM is ready
+      setTimeout(() => {
+        graphRef.current.zoomToFit(400, 20);
+      }, 50);
     }
   }, [graphData]);
 
@@ -112,7 +130,9 @@ const JobRoleMatchPage = () => {
         <div className="glass-panel max-w-2xl w-full p-12 text-center">
           <Briefcase className="w-16 h-16 text-slate-600 mx-auto mb-4" />
           <h2 className="text-3xl font-bold text-white mb-2">No matches yet</h2>
-          <p className="text-slate-400 text-lg mb-8">Analyze a project first – we'll match you to real job roles.</p>
+          <p className="text-slate-400 text-lg mb-8">
+            Analyze a project first – we'll match you to real job roles.
+          </p>
           <a
             href="/analyzer"
             className="inline-flex items-center space-x-2 px-8 py-4 bg-gradient-to-r from-cyan-600 to-purple-600 hover:from-cyan-500 hover:to-purple-500 text-white font-bold rounded-xl shadow-lg shadow-cyan-500/30 transition-all transform hover:scale-105"
@@ -168,41 +188,49 @@ const JobRoleMatchPage = () => {
         </div>
       )}
 
-      {/* ===== GRAPH – FIXED POSITIONS, ALWAYS VISIBLE ===== */}
+      {/* ===== GRAPH – ALWAYS CONTAINED ===== */}
       <div className="glass-panel p-6">
         <div className="flex items-center gap-2 mb-6 border-b border-white/10 pb-4">
           <Target className="w-5 h-5 text-amber-400" />
           <h2 className="text-xl font-semibold text-white">How you connect</h2>
           <span className="text-xs text-slate-400 ml-auto">Your skills → job roles</span>
         </div>
-        <div className="h-[400px] w-full">
-          <ForceGraph2D
-            ref={graphRef}
-            graphData={graphData}
-            nodeLabel={node => `${node.name}`}
-            nodeColor={node => node.color}
-            nodeRelSize={8}
-            linkColor={() => 'rgba(255,255,255,0.25)'}
-            linkWidth={1.5}
-            backgroundColor="#0f172a"
-            cooldownTicks={0}           // No simulation – instant static layout
-            enableNodeDrag={false}      // Prevent accidental moves
-            enableZoomInteraction={true}
-            enablePanInteraction={true}
-            nodeCanvasObject={(node, ctx, globalScale) => {
-              const label = node.name;
-              const fontSize = 12 / globalScale;
-              ctx.font = `${fontSize}px 'Inter', sans-serif`;
-              ctx.fillStyle = node.color;
-              ctx.beginPath();
-              ctx.arc(node.x, node.y, node.val, 0, 2 * Math.PI);
-              ctx.fill();
-              ctx.fillStyle = '#ffffff';
-              ctx.textAlign = 'center';
-              ctx.textBaseline = 'middle';
-              ctx.fillText(label, node.x, node.y - node.val - 6);
-            }}
-          />
+        {/* Graph container with ref for measuring */}
+        <div 
+          ref={containerRef} 
+          className="h-[350px] md:h-[400px] w-full relative"
+        >
+          {dimensions.width > 0 && (
+            <ForceGraph2D
+              ref={graphRef}
+              graphData={graphData}
+              width={dimensions.width}
+              height={dimensions.height}
+              nodeLabel={node => `${node.name}`}
+              nodeColor={node => node.color}
+              nodeRelSize={8}
+              linkColor={() => 'rgba(255,255,255,0.25)'}
+              linkWidth={1.5}
+              backgroundColor="#0f172a"
+              cooldownTicks={0}           // No simulation – instant static layout
+              enableNodeDrag={false}      // Prevent accidental moves
+              enableZoomInteraction={true}
+              enablePanInteraction={true}
+              nodeCanvasObject={(node, ctx, globalScale) => {
+                const label = node.name;
+                const fontSize = 12 / globalScale;
+                ctx.font = `${fontSize}px 'Inter', sans-serif`;
+                ctx.fillStyle = node.color;
+                ctx.beginPath();
+                ctx.arc(node.x, node.y, node.val, 0, 2 * Math.PI);
+                ctx.fill();
+                ctx.fillStyle = '#ffffff';
+                ctx.textAlign = 'center';
+                ctx.textBaseline = 'middle';
+                ctx.fillText(label, node.x, node.y - node.val - 6);
+              }}
+            />
+          )}
         </div>
       </div>
 
@@ -228,8 +256,22 @@ const JobRoleMatchPage = () => {
         </div>
       </div>
 
-      {/* ===== SINGLE ACTION ===== */}
-      
+    
+      {/* ===== SINGLE ACTION – VIEW SKILL GAP ===== */}
+<div className="glass-panel p-8 text-center border border-amber-500/30 bg-gradient-to-br from-amber-900/10 to-cyan-900/10">
+  <h3 className="text-2xl font-bold text-white mb-2">🎯 Ready to bridge the gap?</h3>
+  <p className="text-slate-300 mb-6 max-w-lg mx-auto">
+    You're a <span className="text-amber-400 font-semibold">{bestMatch?.role || 'strong candidate'}</span>.
+    See which skills employers expect that you haven't added yet.
+  </p>
+  <a
+    href="/skill-gap"
+    className="inline-flex items-center space-x-2 px-8 py-4 bg-gradient-to-r from-amber-600 to-cyan-600 hover:from-amber-500 hover:to-cyan-500 text-white font-bold rounded-xl shadow-lg shadow-amber-500/30 transition-all transform hover:scale-105"
+  >
+    <span>View skill gap</span>
+    <ArrowRight className="w-5 h-5" />
+  </a>
+</div>
 
       {/* ===== FOOTER ===== */}
       <div className="text-center text-sm text-slate-500">

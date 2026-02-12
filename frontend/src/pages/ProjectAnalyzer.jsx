@@ -1,11 +1,11 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useResults } from '../context/ResultsContext';
 import jsPDF from 'jspdf';
 import { analyzeProject } from '../services/api';
 import FileUpload from '../components/FileUpload';
 import Loader from '../components/Loader';
-import { useNavigate } from "react-router-dom";
 
+import { useNavigate } from "react-router-dom";
 
 import {
   Brain,
@@ -18,12 +18,44 @@ import {
 } from 'lucide-react';
 
 const ProjectAnalyzer = () => {
-  const [selectedFile, setSelectedFile] = useState(null);
+  // ----- Load selected file metadata from sessionStorage on mount -----
+  const [selectedFile, setSelectedFile] = useState(() => {
+    const saved = sessionStorage.getItem('bridgeAi_selectedFile');
+    if (saved) {
+      const meta = JSON.parse(saved);
+      // Reconstruct a minimal File-like object
+      return {
+        name: meta.name,
+        size: meta.size,
+        lastModified: meta.lastModified,
+        type: meta.type || 'application/pdf'
+      };
+    }
+    return null;
+  });
+
   const [isAnalyzing, setIsAnalyzing] = useState(false);
   const [error, setError] = useState(null);
+
   const { results, setResults } = useResults();
   const navigate = useNavigate();
 
+  const { results, setResults, clearResults } = useResults();
+
+  // ----- Persist selected file metadata whenever it changes -----
+  useEffect(() => {
+    if (selectedFile) {
+      const fileMeta = {
+        name: selectedFile.name,
+        size: selectedFile.size,
+        lastModified: selectedFile.lastModified,
+        type: selectedFile.type
+      };
+      sessionStorage.setItem('bridgeAi_selectedFile', JSON.stringify(fileMeta));
+    } else {
+      sessionStorage.removeItem('bridgeAi_selectedFile');
+    }
+  }, [selectedFile]);
 
   const handleFileSelect = (file) => {
     setSelectedFile(file);
@@ -47,7 +79,7 @@ const ProjectAnalyzer = () => {
     }
   };
 
-  // ===== PROFESSIONAL PDF REPORT – PAGE BREAKS, PERFECT SPACING =====
+  // ----- PDF Report Generation -----
   const downloadReport = () => {
     if (!results) return;
 
@@ -170,7 +202,6 @@ const ProjectAnalyzer = () => {
       y += evidenceHeight + 12;
     };
 
-    // ----- Build PDF -----
     addMainTitle('Bridge-AI Skill Verification Report');
     pdf.setFontSize(11);
     pdf.setFont('times', 'italic');
@@ -242,9 +273,16 @@ const ProjectAnalyzer = () => {
     pdf.save(`Bridge-AI_Report_${new Date().toISOString().slice(0, 10)}.pdf`);
   };
 
+  // ----- Clear all persisted data on logout / new analysis -----
+  const handleReset = () => {
+    setResults(null);
+    setSelectedFile(null);
+    sessionStorage.removeItem('bridgeAi_selectedFile');
+    localStorage.removeItem('bridgeAi_results');
+  };
+
   return (
     <div className="min-h-screen pb-24 flex flex-col bg-[#020617]">
-      {/* Sticky Header */}
       <header className="bg-[#020617]/50 backdrop-blur-2xl border-b border-white/10 sticky top-0 z-40">
         <div className="max-w-7xl mx-auto px-6 py-4">
           <div className="flex items-center justify-between">
@@ -265,9 +303,7 @@ const ProjectAnalyzer = () => {
         </div>
       </header>
 
-      {/* Main Content */}
       <main className="flex-grow max-w-5xl mx-auto px-6 py-16 w-full">
-        {/* Hero Section */}
         {!results && !isAnalyzing && (
           <div className="text-center mb-16 animate-in fade-in slide-in-from-bottom-4 duration-700">
             <div className="inline-flex items-center space-x-2 px-5 py-2.5 bg-white/5 border border-white/10 rounded-full mb-8 shadow-lg">
@@ -284,12 +320,10 @@ const ProjectAnalyzer = () => {
           </div>
         )}
 
-        {/* Upload Section */}
         {!isAnalyzing && !results && (
           <div className="max-w-2xl mx-auto animate-in fade-in duration-1000 delay-150">
             <FileUpload onFileSelect={handleFileSelect} disabled={isAnalyzing} />
             <div className="mt-10 text-center">
-              {/* ===== UPDATED PREMIUM ANALYZE BUTTON ===== */}
               <button
                 onClick={handleAnalyze}
                 disabled={!selectedFile || isAnalyzing}
@@ -314,14 +348,12 @@ const ProjectAnalyzer = () => {
           </div>
         )}
 
-        {/* Loading State */}
         {isAnalyzing && (
           <div className="animate-in fade-in duration-300">
             <Loader />
           </div>
         )}
 
-        {/* Error State */}
         {error && (
           <div className="max-w-2xl mx-auto mb-8 animate-in slide-in-from-bottom-4">
             <div className="glass-panel border-red-500/30 bg-red-500/10 p-8 relative overflow-hidden">
@@ -346,7 +378,6 @@ const ProjectAnalyzer = () => {
           </div>
         )}
 
-        {/* Results Section */}
         {results && !isAnalyzing && (
           <div className="space-y-12 animate-in fade-in slide-in-from-bottom-8 duration-700">
             <div className="text-center pb-12 border-b border-white/10">
@@ -364,7 +395,6 @@ const ProjectAnalyzer = () => {
               </p>
             </div>
 
-            {/* Professional Summary */}
             <div className="glass-panel p-8 space-y-6">
               <h3 className="text-2xl font-bold text-white">Professional Summary</h3>
               <p className="text-slate-300 leading-relaxed">{results.summary}</p>
@@ -380,7 +410,6 @@ const ProjectAnalyzer = () => {
               </div>
             </div>
 
-            {/* Skills List */}
             <div className="glass-panel p-8">
               <h3 className="text-2xl font-bold text-white mb-8">
                 Verified Skills ({results.skills?.length})
@@ -402,7 +431,6 @@ const ProjectAnalyzer = () => {
               </ul>
             </div>
 
-            {/* Industry Gap Analysis */}
             <div className="glass-panel p-8">
               <h3 className="text-2xl font-bold text-red-400 mb-4">Industry Gap Analysis</h3>
               <ul className="list-disc pl-6 space-y-2 text-slate-300">
@@ -412,7 +440,6 @@ const ProjectAnalyzer = () => {
               </ul>
             </div>
 
-            {/* Suggested Skills to Learn */}
             <div className="glass-panel p-8">
               <h3 className="text-2xl font-bold text-yellow-400 mb-4">Suggested Skills to Learn</h3>
               <div className="flex flex-wrap gap-3">
@@ -427,7 +454,6 @@ const ProjectAnalyzer = () => {
               </div>
             </div>
 
-            {/* Recommended Job Roles */}
             <div className="glass-panel p-8">
               <h3 className="text-2xl font-bold text-emerald-400 mb-4">Recommended Job Roles</h3>
               <div className="flex flex-wrap gap-3">
@@ -442,13 +468,9 @@ const ProjectAnalyzer = () => {
               </div>
             </div>
 
-            {/* Action Buttons */}
             <div className="flex flex-col md:flex-row justify-center items-center gap-6 mt-16">
               <button
-                onClick={() => {
-                  setResults(null);
-                  setSelectedFile(null);
-                }}
+                onClick={handleReset}
                 className="group relative px-10 py-5 bg-white/5 backdrop-blur-sm border border-white/20 rounded-xl 
                          hover:border-cyan-400/50 hover:bg-white/10 transition-all duration-300 
                          shadow-lg hover:shadow-cyan-500/10 transform hover:scale-[1.02]"

@@ -211,6 +211,21 @@ const SkillGapPage = () => {
             </div>
           </div>
         ))}
+        {/* ===== SINGLE ACTION – BUILD ROADMAP ===== */}
+<div className="glass-panel p-8 text-center border border-cyan-500/30 bg-gradient-to-br from-cyan-900/10 to-purple-900/10">
+  <h3 className="text-2xl font-bold text-white mb-2">🎯 Ready to close your gaps?</h3>
+  <p className="text-slate-300 mb-6 max-w-lg mx-auto">
+    Focus on <span className="text-red-400 font-semibold">red categories</span> first – they matter most to employers.
+    We'll build a step‑by‑step learning plan for you.
+  </p>
+  <a
+    href="/roadmap"
+    className="inline-flex items-center space-x-2 px-8 py-4 bg-gradient-to-r from-cyan-600 to-purple-600 hover:from-cyan-500 hover:to-purple-500 text-white font-bold rounded-xl shadow-lg shadow-cyan-500/30 transition-all transform hover:scale-105"
+  >
+    <span>Build my learning plan</span>
+    <ArrowRight className="w-5 h-5" />
+  </a>
+</div>
       </div>
 
       {/* ===== SINGLE CLEAR ACTION ===== */}

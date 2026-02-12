@@ -97,13 +97,22 @@ const SkillChartPage = () => {
       </div>
 
       {/* ===== SIMPLE ACTION ===== */}
-      <div className="glass-panel p-8 text-center border border-cyan-500/30 bg-gradient-to-br from-cyan-900/10 to-purple-900/10">
-        <h3 className="text-2xl font-bold text-white mb-2">See how you compare</h3>
-        <p className="text-slate-300 mb-6 max-w-lg mx-auto">
-          Your strongest category is <span className="text-cyan-400 font-semibold">{strongestCategory?.name || 'technical'}</span>.
-          Want to know where you stand against market demand?
-        </p>
-      </div>
+    
+<div className="glass-panel p-8 text-center border border-cyan-500/30 bg-gradient-to-br from-cyan-900/10 to-purple-900/10">
+  <h3 className="text-2xl font-bold text-white mb-2">📊 See how you compare</h3>
+  <p className="text-slate-300 mb-6 max-w-lg mx-auto">
+    Your strongest category is <span className="text-cyan-400 font-semibold">{strongestCategory?.name || 'technical'}</span>.
+    Find out where you stand against market demand.
+  </p>
+  <a
+    href="/skill-gap"
+    className="inline-flex items-center space-x-2 px-8 py-4 bg-gradient-to-r from-cyan-600 to-purple-600 hover:from-cyan-500 hover:to-purple-500 text-white font-bold rounded-xl shadow-lg shadow-cyan-500/30 transition-all transform hover:scale-105"
+  >
+    <span>View skill gap</span>
+    <ArrowRight className="w-5 h-5" />
+  </a>
+</div>
+      
 
       {/* ===== FOOTER – TOTAL SKILLS ===== */}
       <div className="text-center text-sm text-slate-500">
