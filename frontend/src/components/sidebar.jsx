@@ -35,7 +35,7 @@ const Sidebar = () => {
     {
       category: 'TOOLS',
       items: [
-        { name: 'TorchMyResume', icon: FileText, path: '/torch' },
+        { name: 'Bridge Mentor AI', icon: Sparkles, path: '/mentor' },
         { name: 'Resume Studio', icon: Layers, path: '/resume-studio' },
         { name: 'Mock Interview', icon: FileText, path: '/mock' },
         { name: 'Skill-set Finder', icon: Search, path: '/skillset' }

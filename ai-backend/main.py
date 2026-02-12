@@ -5,8 +5,19 @@ from services.text_splitter import split_text
 from services.embeddings import create_vector_store
 from services.skill_extractor import extract_skills_with_evidence
 from services.resume_generator import generate_verified_resume  # NEW
+from pydantic import BaseModel
+from services.mentor import mentor_ai
 
 app = FastAPI()
+
+class MentorRequest(BaseModel):
+    question: str
+    analysis: dict
+
+@app.post("/mentor")
+async def mentor_endpoint(request: MentorRequest):
+    answer = mentor_ai(request.question, request.analysis)
+    return {"answer": answer}
 
 # CORS (VERY IMPORTANT for frontend)
 app.add_middleware(

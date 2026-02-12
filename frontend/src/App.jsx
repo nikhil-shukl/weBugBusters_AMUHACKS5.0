@@ -11,6 +11,8 @@ import SkillGapPage from './pages/SkillGapPage';               // <-- NEW
 import LearningRoadmapPage from './pages/LearningRoadmapPage'; // <-- NEW
 import ResumeAnalyzer from './pages/ResumeAnalyzer';
 import ResumeWorkspace from './pages/ResumeWorkspace';
+import BridgeMentorAI from "./pages/BridgeMentorAI";
+
 
 // Placeholders
 const Talks = () => <div className="p-8 text-white text-center">Disha Talks</div>;
@@ -32,6 +34,7 @@ function App() {
             <Route path="/resume-studio" element={<ResumeAnalyzer />} />
             <Route path="/resume-workspace" element={<ResumeWorkspace />} />
             <Route path="/talks" element={<Talks />} />
+            <Route path="/mentor" element={<BridgeMentorAI />} />
           </Route>
         </Routes>
       </ResultsProvider>

@@ -4,6 +4,8 @@ import jsPDF from 'jspdf';
 import { analyzeProject } from '../services/api';
 import FileUpload from '../components/FileUpload';
 import Loader from '../components/Loader';
+import { useNavigate } from "react-router-dom";
+
 
 import {
   Brain,
@@ -20,6 +22,8 @@ const ProjectAnalyzer = () => {
   const [isAnalyzing, setIsAnalyzing] = useState(false);
   const [error, setError] = useState(null);
   const { results, setResults } = useResults();
+  const navigate = useNavigate();
+
 
   const handleFileSelect = (file) => {
     setSelectedFile(file);
@@ -474,6 +478,24 @@ const ProjectAnalyzer = () => {
           </div>
         )}
       </main>
+
+<button
+  onClick={() => {
+    if (!results) {
+      alert("Please analyze your project first before using Mentor AI.");
+      return;
+    }
+
+    navigate("/mentor", {
+      state: { analysis: results },  // 👈 PASS FULL ANALYSIS
+    });
+  }}
+  className="fixed bottom-6 right-6 bg-cyan-500 hover:bg-cyan-600 px-4 py-3 rounded-full shadow-lg transition"
+>
+  💬 Ask Mentor AI
+</button>
+
+
 
       {/* Footer */}
       <footer className="w-full border-t border-white/10 bg-[#020617]/80 backdrop-blur-xl mt-auto">
