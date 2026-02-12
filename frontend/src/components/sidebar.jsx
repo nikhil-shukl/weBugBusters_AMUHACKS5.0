@@ -12,7 +12,8 @@ import {
   LogOut,
   TrendingUp,
   Map,
-  Zap      // <-- IMPORT ZAP for Growth Simulator
+  Zap,
+  MessageSquare   // <-- IMPORTED for Mock Interview
 } from 'lucide-react';
 
 const Sidebar = () => {
@@ -29,7 +30,7 @@ const Sidebar = () => {
         { name: 'Skill Chart', icon: Compass, path: '/skill_chart' },
         { name: 'Role Match', icon: Briefcase, path: '/role-match' },
         { name: 'Skill Gap', icon: TrendingUp, path: '/skill-gap' },
-        { name: 'Growth Simulator', icon: Zap, path: '/growth-simulator' }, // <-- NEW
+        { name: 'Growth Simulator', icon: Zap, path: '/growth-simulator' },
         { name: 'Career Roadmap', icon: Map, path: '/roadmap' }
       ]
     },
@@ -38,7 +39,7 @@ const Sidebar = () => {
       items: [
        
         { name: 'Resume Studio', icon: Layers, path: '/resume-studio' },
-        { name: 'Mock Interview', icon: FileText, path: '/mock' }
+        { name: 'Mock Interview', icon: MessageSquare, path: '/mock-interview' }
       ]
     },
     {
@@ -51,21 +52,10 @@ const Sidebar = () => {
 
   return (
     <aside className="fixed left-0 top-0 h-screen w-64 bg-[#020617]/80 backdrop-blur-2xl border-r border-white/10 z-50">
-      {/* Logo area – stacked logo */}
+      {/* Logo area */}
       <div className="p-5 border-b border-white/10">
-        {/* If you have a Logo component, use it; otherwise keep empty or simple */}
         <div className="flex flex-col items-start">
-          <div className="flex items-center gap-2">
-            <div className="w-8 h-8 rounded-lg bg-gradient-to-br from-cyan-400 to-purple-500 flex items-center justify-center">
-              <Sparkles className="w-4 h-4 text-white" />
-            </div>
-            <span className="text-lg font-bold bg-gradient-to-r from-cyan-400 to-purple-400 bg-clip-text text-transparent">
-              Bridge-AI
-            </span>
-          </div>
-          <span className="text-[10px] text-slate-500 mt-1 uppercase tracking-wider">
-            by weBugBusters
-          </span>
+          
         </div>
       </div>
       

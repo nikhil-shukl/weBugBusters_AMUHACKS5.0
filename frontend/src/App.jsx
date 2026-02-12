@@ -12,6 +12,7 @@ import LearningRoadmapPage from './pages/LearningRoadmapPage';
 import SkillGrowthSimulatorPage from './pages/SkillGrowthSimulatorPage';
 import ResumeAnalyzer from './pages/ResumeAnalyzer';
 import ResumeWorkspace from './pages/ResumeWorkspace';
+import MockInterviewPage from './pages/MockInterviewPage'; // <-- NEW IMPORT
 import Logout from './pages/Logout';
 
 // Placeholders for other routes
@@ -36,6 +37,7 @@ function App() {
             <Route path="/growth-simulator" element={<SkillGrowthSimulatorPage />} />
             <Route path="/resume-studio" element={<ResumeAnalyzer />} />
             <Route path="/resume-workspace" element={<ResumeWorkspace />} />
+            <Route path="/mock-interview" element={<MockInterviewPage />} /> {/* <-- NEW ROUTE */}
             <Route path="/talks" element={<Talks />} />
             <Route path="/logout" element={<Logout />} />
           </Route>
