@@ -172,15 +172,7 @@ Transforms academic documentation into:
 
 ## 🌍 Live Deployment
 
-Frontend:  
-🔗 https://your-frontend-url.onrender.com  
-
-Node Backend:  
-🔗 https://your-node-backend.onrender.com  
-
-AI Backend:  
-🔗 https://your-ai-backend.onrender.com  
-
+https://webugbusters-amuhacks5-0.onrender.com/
 ---
 
 ## 📊 Example Output
@@ -264,5 +256,6 @@ It’s a bridge between ambition and opportunity.”
 #AMU  
 
 ---
+
 
 
